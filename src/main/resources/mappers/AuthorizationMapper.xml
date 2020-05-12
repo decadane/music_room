@@ -1,0 +1,23 @@
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.kmedhurs.music_room.mappers.AuthorizationMapper">
+
+    <insert id="registerUser">
+        INSERT INTO users
+        VALUES (#{dto.username}, #{passwordHash});
+        INSERT INTO authorities
+        VALUES (#{dto.username}, 'ROLE_USER');
+        INSERT INTO verifications
+        VALUES (uuid_generate_v1(), #{dto.username});
+    </insert>
+
+    <select id="enableUser" resultType="string">
+        UPDATE users
+        SET enabled = true
+        FROM verifications
+        WHERE users.username = verifications.username
+          AND uuid_eq(token, #{token}::uuid) RETURNING users.username;
+        DELETE
+        FROM verifications
+        WHERE token = #{token}::uuid;
+    </select>
+</mapper>

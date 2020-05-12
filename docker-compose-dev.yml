@@ -1,0 +1,23 @@
+version: '3'
+services:
+  app:
+    container_name: music_room_app
+    image: music_room
+    depends_on:
+      - db
+    restart: on-failure
+    ports:
+      - "8443:8443"
+  db:
+    container_name: music_room_db
+    image: postgres:11.3
+    environment:
+      POSTGRES_DB: music_room
+      POSTGRES_PASSWORD: dY5!b_OG5f
+    volumes:
+      - /home/mvp_dev/docker/volumes/music_room_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
