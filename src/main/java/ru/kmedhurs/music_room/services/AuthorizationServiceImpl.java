@@ -14,11 +14,13 @@ import java.util.UUID;
 public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final AuthorizationMapper authorizationMapper;
+    private final NotificationService notificationService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void registerUser(RegistrationDto dto) {
-        authorizationMapper.registerUser(dto, passwordEncoder.encode(dto.getPassword()));
+        String token = authorizationMapper.registerUser(dto, passwordEncoder.encode(dto.getPassword()));
+        notificationService.sendVerifyNotification(token);
     }
 
     @Override

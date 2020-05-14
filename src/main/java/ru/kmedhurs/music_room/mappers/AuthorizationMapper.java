@@ -8,7 +8,7 @@ import ru.kmedhurs.music_room.model.RegistrationDto;
 @Mapper
 public interface AuthorizationMapper {
 
-    void registerUser(RegistrationDto dto, String passwordHash);
+    String registerUser(RegistrationDto dto, String passwordHash);
 
     String enableUser(String token);
 }

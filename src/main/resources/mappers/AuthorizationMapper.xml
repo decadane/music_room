@@ -1,14 +1,14 @@
 <!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.kmedhurs.music_room.mappers.AuthorizationMapper">
 
-    <insert id="registerUser">
+    <select id="registerUser" resultType="string">
         INSERT INTO users
         VALUES (#{dto.username}, #{passwordHash});
         INSERT INTO authorities
         VALUES (#{dto.username}, 'ROLE_USER');
         INSERT INTO verifications
-        VALUES (uuid_generate_v1(), #{dto.username});
-    </insert>
+        VALUES (uuid_generate_v1(), #{dto.username}) RETURNING token;
+    </select>
 
     <select id="enableUser" resultType="string">
         UPDATE users
